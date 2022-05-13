@@ -1,58 +1,51 @@
-import React, { useState, useRef } from 'react';
-import {View, StyleSheet, Text, Button, TextInput, ScrollView } from 'react-native';
-import List from './src/List';
+import React, { useState, useEffect } from 'react';
+import {View, StyleSheet, Text, Button, Alert, Image, TextInput } from 'react-native';
+import native from './native.png';
+
+
 
 const App = () => {
-    const [value, setValue] = useState("");
-    const [todo, setTodo] = useState(List);
-    const listViewRef = useRef({});
-    const addTodo = () =>{
-        let now = new Date();
-        setTodo([...todo, {id: `todo${now}`, text: value, date: now, selected: false}]);
-    }
-    const listSelected = (e) =>{
-        e.selected = !e.selected;
-        listViewRef.current[e.id].style.textDecorationLine = e.selected? 'line-through': 'none';
-    }
+    const [value, setValue] = useState(0);
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [time, setTime] = useState(new Date());
+    const countUp = () =>{
+        setValue(value+1);
+    };
+    useEffect(()=>{
+        Alert.alert(
+            "Count Up",
+            `now count is ${value}`,
+        );
+        console.log(value);
+    }, [value])
+    useEffect(()=>{
+        Alert.alert(
+            "처음에는 값이 변해요",
+            `now count is ${value} \nemail is ${email}\n name is ${name}`,
+        );
+        console.log(value, email, name);
+    },[])
+    setInterval(()=> setTime(new Date()), 1000);
     return (
     <View style={styles.container}>
-        <View style={styles.wrapper}>
-            <Text style={{fontSize:80, padding: 10}}>9th week</Text>
-            <Text style={styles.title}>할 일</Text>
-            <TextInput 
-                style={styles.textInput}
-                onChangeText={text=>setValue(text)} 
-            />
+        <View style={{flex: 3, justifyContent: 'center'}}>
+            <Image style={styles.image} source={native} />
+            <Text style={{fontSize:80, padding: 10}}>Count : {value}</Text>
+            <Button title='click' onPress={countUp} />
         </View>
-        <View style={styles.wrapper}>
-            <Button title='submit' onPress={()=>addTodo()} />
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
+            <Text style={styles.defaultFont}>이메일 : {email}</Text>
+            <Text style={styles.defaultFont}>이름 : {name}</Text>
         </View>
-        <View style={{ width: '100%', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-            <Text style={styles.title}>List</Text>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
+            <TextInput style={styles.defaultFont} onChangeText={v=>setEmail(v)} placeholder={'이메일을 입력하세요'} />
+            <TextInput style={styles.defaultFont} onChangeText={(v)=>setName(v)} placeholder={'이름을 입력하세요'} />
         </View>
-        <ScrollView style={styles.listView} >
-            {todo.map((e)=>(
-                <View style={styles.listItem} key={e.id} onPress={()=>{listSelected(e)}} onClick={()=>{listSelected(e)}} >
-                {e.selected ?(
-                    <Text 
-                        style={styles.listItemTextSelected} 
-                        selected={e.selected} 
-                        ref={ref=>(listViewRef.current[e.id]=ref)}
-                    >
-                        {e.text}
-                    </Text>
-                ):(
-                    <Text 
-                        style={styles.listItemText} 
-                        selected={e.selected} 
-                        ref={ref=>(listViewRef.current[e.id]=ref)}
-                    >
-                        {e.text}
-                    </Text>
-                )}
-                </View>
-            ))}
-        </ScrollView>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
+            <Text style={styles.defaultFont} >현재 시간 : {time.getHours()} : {time.getMinutes()} : {time.getSeconds()} {time.getHours()<12 ? 'AM' : 'PM'}</Text>
+        </View>
+        
     </View>
     );
 };  
@@ -67,39 +60,13 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
     },
-    wrapper:{
-        marginTop: 20,
-        width: '100%',
+    image: {
+        width: 400,
+        height: 200,
+        resizeMode: 'contain', // 더 작은 값을 기준으로 사진의 비율을 맞춤
     },
-    textInput:{
-        fontSize: 18,
-        borderBottomColor: 'gray',
-        borderBottomWidth: 2,
-        padding: 10,
-    },
-    title: {
+    defaultFont: {
         fontSize: 30,
-        fontWeight: 'bold',
-        paddingVertical: 20,
-    },
-    listView: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-    }, 
-    listItem: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginVertical: 3,
-    },
-    listItemText: {
-        fontSize: 25,
-    },
-    listItemTextSelected: {
-        fontSize: 25,
-        textDecorationLine: 'line-through',
     },
 });
 
