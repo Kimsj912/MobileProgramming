@@ -19,7 +19,10 @@ const App = () => {
         <View style={styles.wrapper}>
             <Text style={{fontSize:80, padding: 10}}>9th week</Text>
             <Text style={styles.title}>할 일</Text>
-            <TextInput style={styles.textInput} onChangeText={e=>setValue(e)} />
+            <TextInput 
+                style={styles.textInput}
+                onChangeText={text=>setValue(text)} 
+            />
         </View>
         <View style={styles.wrapper}>
             <Button title='submit' onPress={()=>addTodo()} />
@@ -31,9 +34,21 @@ const App = () => {
             {todo.map((e)=>(
                 <View style={styles.listItem} key={e.id} onPress={()=>{listSelected(e)}} onClick={()=>{listSelected(e)}} >
                 {e.selected ?(
-                    <Text style={styles.listItemTextSelected} selected={e.selected} ref={ref=>(listViewRef.current[e.id]=ref)}>{e.text}</Text>
+                    <Text 
+                        style={styles.listItemTextSelected} 
+                        selected={e.selected} 
+                        ref={ref=>(listViewRef.current[e.id]=ref)}
+                    >
+                        {e.text}
+                    </Text>
                 ):(
-                    <Text style={styles.listItemText} selected={e.selected} ref={ref=>(listViewRef.current[e.id]=ref)}>{e.text}</Text>
+                    <Text 
+                        style={styles.listItemText} 
+                        selected={e.selected} 
+                        ref={ref=>(listViewRef.current[e.id]=ref)}
+                    >
+                        {e.text}
+                    </Text>
                 )}
                 </View>
             ))}
