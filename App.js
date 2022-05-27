@@ -17,7 +17,7 @@ const App = () => {
             "Count Up",
             `now count is ${value}`,
         );
-        console.log(value);
+        console.log(value); 
     }, [value])
     useEffect(()=>{
         Alert.alert(
